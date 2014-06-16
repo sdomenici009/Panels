@@ -17,9 +17,7 @@ public class InputHandler : MonoBehaviour {
 		if(Input.GetMouseButtonDown(0))
 		{
 			if(Physics.Raycast(ray, out hit))
-			{
-				Debug.Log("HIT!");
-				
+			{				
 				Flip hitFlip = hit.transform.GetComponent<Flip>();
 				
 				if(hitFlip != null)

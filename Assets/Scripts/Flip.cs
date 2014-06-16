@@ -6,7 +6,6 @@ public class Flip : MonoBehaviour {
 	public bool flip = false;
 	float speed = 10f;
 	float dir = 1;
-	float xAng = 180f;
 	
 	void Start () {
 	}
