@@ -3,36 +3,25 @@ using System.Collections;
 
 public class Flip : MonoBehaviour {
 	
-	float rotation = .1f;
-	float orginTime = 1f;
-	float timer;
-	bool flip = false;
-	// Use this for initialization
+	public bool flip = false;
+	float speed = 10f;
+	float dir = 1;
+	float xAng = 180f;
+	
 	void Start () {
-		timer = orginTime;
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		timer -= Time.deltaTime;
-		
+	public void Update () {
 		if(flip)
-		{
-			transform.rotation = new Quaternion(Mathf.Clamp(transform.rotation.x + rotation, 0, 360), transform.rotation.y, transform.rotation.z, transform.rotation.w);
-		}
-		
-		if(timer < 0)
-		{
-			timer = orginTime;
-			
-			if(flip)
+		{	
+			if((dir > 0 && transform.rotation.x >= 1f) || (dir < 0 && transform.rotation.x <= 0f))
 			{
+				dir = -dir;
 				flip = false;
 			}
 			else
 			{
-				flip = true;
-				rotation = -rotation;
+				transform.Rotate(new Vector3(dir*speed, 0 ,0));
 			}
 		}
 	}
