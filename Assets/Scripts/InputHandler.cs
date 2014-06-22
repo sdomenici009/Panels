@@ -5,6 +5,7 @@ public class InputHandler : MonoBehaviour {
 	
 	RaycastHit hit;
 	Card currentCard;
+	bool rotate = false;
 	
 	// Use this for initialization
 	void Start () {
@@ -17,12 +18,20 @@ public class InputHandler : MonoBehaviour {
 						
 		if(currentCard != null)
 		{
-			Vector3 test = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, currentCard.transform.position.z + 10));
-			currentCard.transform.position = new Vector3(test.x, test.y, currentCard.transform.position.z);
+			if(!rotate)
+			{
+				Vector3 test = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, currentCard.transform.position.z + 10));
+				currentCard.transform.position = new Vector3(test.x, test.y, currentCard.transform.position.z);
+			}
+			else
+			{
+				currentCard.transform.Rotate(new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.deltaTime * 555f);
+			}
 		}
 		
 		if(Input.GetMouseButtonDown(0))
 		{	
+			rotate = false;
 			if(Physics.Raycast(ray, out hit))
 			{				
 				
@@ -46,6 +55,19 @@ public class InputHandler : MonoBehaviour {
 				{
 					currentCard = null;
 				}
+			}
+		}
+		
+		if(Input.GetMouseButtonDown(1))
+		{	
+			if(currentCard != null && rotate != true)
+			{
+				rotate = true;
+			}
+			else
+			{
+				currentCard = null;
+				rotate = false;
 			}
 		}
 	}
