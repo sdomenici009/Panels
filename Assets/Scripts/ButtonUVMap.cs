@@ -1,10 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Panel : MonoBehaviour {
-
+public class ButtonUVMap : MonoBehaviour {
+	
 	// Use this for initialization
 	void Start () {
+		GenerateUV();
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
+	}
+	
+	void GenerateUV(){
 		Mesh theMesh;
 		theMesh = transform.GetComponent<MeshFilter>().mesh;
 		 
@@ -45,10 +54,5 @@ public class Panel : MonoBehaviour {
 		 
 		// Assign the mesh its new UVs
 		theMesh.uv = theUVs;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

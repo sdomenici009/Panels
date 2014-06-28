@@ -4,12 +4,16 @@ using System.Collections;
 public class InputHandler : MonoBehaviour {
 	
 	RaycastHit hit;
-	Card currentCard;
+	GameObject currentCard;
 	bool rotate = false;
+	public Hand hand;
+	public Deck deck;
 	
 	// Use this for initialization
 	void Start () {
 		hit = new RaycastHit();
+		hand = GameObject.Find ("Hand").GetComponent<Hand>();
+		deck = GameObject.Find ("Deck").GetComponent<Deck>();
 	}
 	
 	// Update is called once per frame
@@ -29,11 +33,45 @@ public class InputHandler : MonoBehaviour {
 			}
 		}
 		
+		if(Physics.Raycast(ray, out hit))
+		{
+			Card card = hit.transform.GetComponent<Card>();
+			if(card != null)
+			{
+				if(hand.currentCard != card)
+				{
+					if(hand.currentCard != null)
+						hand.currentCard.hovered = false;
+					
+					if(card.selectable)
+					{
+						hand.currentCard = card;
+						card.hovered = true;
+					}
+				}
+			}
+		}
+		else
+		{
+			if(hand.currentCard != null)
+					hand.currentCard.hovered = false;
+				
+			hand.currentCard = null;
+		}
+		
+		
 		if(Input.GetMouseButtonDown(0))
 		{	
 			rotate = false;
 			if(Physics.Raycast(ray, out hit))
 			{				
+				
+				Button button = hit.transform.GetComponent<Button>();
+				
+				if(button != null)
+				{
+					button.DrawCard(hand, deck);
+				}
 				
 				Flip hitFlip = hit.transform.GetComponent<Flip>();
 				
@@ -44,11 +82,11 @@ public class InputHandler : MonoBehaviour {
 				
 				if(currentCard == null)
 				{
-					Card card = hit.transform.GetComponent<Card>();
+					CardUVMap map = hit.transform.GetComponent<CardUVMap>();
 					
-					if(card != null)
+					if(map != null)
 					{
-						currentCard = card;
+						currentCard = hit.transform.gameObject;
 					}
 				}
 				else

@@ -19,7 +19,7 @@ public class Grid : MonoBehaviour {
 		{
 			for(int j=0; j < gridSize.y; j++)
 			{
-				GameObject panel = (GameObject)Instantiate(Resources.Load("Panel"), new Vector3(topLeftPosition.x + i*spacing, topLeftPosition.y - j*spacing, 0), Quaternion.identity);
+				GameObject button = (GameObject)Instantiate(Resources.Load("Button"), new Vector3(topLeftPosition.x + i*spacing, topLeftPosition.y - j*spacing, 0), Quaternion.identity);
 			}
 		}
 	}
