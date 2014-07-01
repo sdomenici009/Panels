@@ -12,14 +12,13 @@ public class InputHandler : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		hit = new RaycastHit();
-		hand = GameObject.Find ("Hand").GetComponent<Hand>();
-		deck = GameObject.Find ("Deck").GetComponent<Deck>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-						
+			
 		if(currentCard != null)
 		{
 			if(!rotate)
@@ -38,27 +37,36 @@ public class InputHandler : MonoBehaviour {
 			Card card = hit.transform.GetComponent<Card>();
 			if(card != null)
 			{
+				Debug.Log("CARD HIT");
 				if(hand.currentCard != card)
 				{
+					Debug.Log("NO CURRENT CARD");
 					if(hand.currentCard != null)
 						hand.currentCard.hovered = false;
 					
 					if(card.selectable)
 					{
+						Debug.Log("SELECTABLE");
 						hand.currentCard = card;
 						card.hovered = true;
 					}
 				}
 			}
+			else
+			{
+				if(hand.currentCard != null)
+					hand.currentCard.hovered = false;
+					
+				hand.currentCard = null;
+			}
 		}
 		else
 		{
 			if(hand.currentCard != null)
-					hand.currentCard.hovered = false;
+				hand.currentCard.hovered = false;
 				
 			hand.currentCard = null;
 		}
-		
 		
 		if(Input.GetMouseButtonDown(0))
 		{	
