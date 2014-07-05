@@ -4,75 +4,72 @@ using System.Collections;
 public class InputHandler : MonoBehaviour {
 	
 	RaycastHit hit;
-	GameObject currentCard;
-	bool rotate = false;
 	public Hand hand;
 	public Deck deck;
+	public InfiniteList buttonList;
 	
 	// Use this for initialization
 	void Start () {
 		hit = new RaycastHit();
+		buttonList = GameObject.Find("List").GetComponent<InfiniteList>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			
-		if(currentCard != null)
-		{
-			if(!rotate)
-			{
-				Vector3 test = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, currentCard.transform.position.z + 10));
-				currentCard.transform.position = new Vector3(test.x, test.y, currentCard.transform.position.z);
-			}
-			else
-			{
-				currentCard.transform.Rotate(new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.deltaTime * 555f);
-			}
-		}
 		
 		if(Physics.Raycast(ray, out hit))
 		{
 			Card card = hit.transform.GetComponent<Card>();
 			if(card != null)
 			{
-				Debug.Log("CARD HIT");
-				if(hand.currentCard != card)
+				if(hand.hoverCard != card)
 				{
-					Debug.Log("NO CURRENT CARD");
-					if(hand.currentCard != null)
-						hand.currentCard.hovered = false;
+					if(hand.hoverCard != null)
+						hand.hoverCard.hovered = false;
 					
 					if(card.selectable)
 					{
-						Debug.Log("SELECTABLE");
-						hand.currentCard = card;
+						hand.hoverCard = card;
 						card.hovered = true;
 					}
 				}
 			}
 			else
 			{
-				if(hand.currentCard != null)
-					hand.currentCard.hovered = false;
+				if(hand.hoverCard != null)
+					hand.hoverCard.hovered = false;
 					
-				hand.currentCard = null;
+				hand.hoverCard = null;
 			}
 		}
 		else
 		{
-			if(hand.currentCard != null)
-				hand.currentCard.hovered = false;
+			if(hand.hoverCard != null)
+				hand.hoverCard.hovered = false;
 				
-			hand.currentCard = null;
+			hand.hoverCard = null;
+		}
+		
+		if(Input.GetMouseButtonUp(0))
+		{
+			buttonList.selected = false;
 		}
 		
 		if(Input.GetMouseButtonDown(0))
 		{	
-			rotate = false;
+			if(!buttonList.selected)
+				buttonList.selected = true;
+			
 			if(Physics.Raycast(ray, out hit))
 			{				
+				
+				InfiniteList iList = hit.transform.GetComponent<InfiniteList>();
+				if(iList != null)
+				{
+					iList.selected = true;
+				}
 				
 				Button button = hit.transform.GetComponent<Button>();
 				
@@ -88,33 +85,35 @@ public class InputHandler : MonoBehaviour {
 					hitFlip.flip = true;
 				}
 				
-				if(currentCard == null)
+				if(hand.selectedCard == null)
 				{
 					CardUVMap map = hit.transform.GetComponent<CardUVMap>();
 					
 					if(map != null)
 					{
-						currentCard = hit.transform.gameObject;
+						hand.selectedCard = hit.transform.GetComponent<Card>();
+						hand.selectedCard.selected = true;
 					}
 				}
 				else
 				{
-					currentCard = null;
+					hand.selectedCard.selected = false;
+					hand.selectedCard = null;
+				}
+			}
+			else
+			{
+				if(hand.selectedCard != null)
+				{
+					hand.selectedCard.selected = false;
+					hand.selectedCard = null;
 				}
 			}
 		}
 		
 		if(Input.GetMouseButtonDown(1))
-		{	
-			if(currentCard != null && rotate != true)
-			{
-				rotate = true;
-			}
-			else
-			{
-				currentCard = null;
-				rotate = false;
-			}
+		{
+			buttonList.AddButton();
 		}
 	}
 }

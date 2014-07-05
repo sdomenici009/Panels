@@ -7,17 +7,19 @@ public class Card : MonoBehaviour {
 	public float scaleSpeed;
 	public float xPos = 0;
 	public bool selectable;
+	public bool selected;
 
 	// Use this for initialization
 	void Start () {
 		selectable = true;
 		speed = 5f;
 		scaleSpeed = 5f;
+		selected = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(hovered)
+		if(hovered && !selected)
 		{
 			transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(4, 6, 0.1f), scaleSpeed * Time.deltaTime);
 			transform.position = Vector3.MoveTowards(transform.position, new Vector3(xPos, -.425f ,-3), speed * Time.deltaTime);
