@@ -113,7 +113,7 @@ public class InputHandler : MonoBehaviour {
 		
 		if(Input.GetMouseButtonDown(1))
 		{
-			buttonList.AddButton();
+			buttonList.AddButton((GameObject)Instantiate(Resources.Load("Button")));
 		}
 	}
 }

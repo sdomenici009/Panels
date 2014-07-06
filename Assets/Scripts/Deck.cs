@@ -11,6 +11,7 @@ public class Deck : MonoBehaviour {
 		for(int i=0; i < 30; i++)
 		{
 			GameObject card = (GameObject)Instantiate(Resources.Load ("Card 1"), Vector3.zero, Quaternion.identity);
+			card.transform.parent = transform;
 			card.SetActive(false);
 			cards.Add(card);
 		}
